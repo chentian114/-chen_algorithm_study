@@ -85,14 +85,10 @@ public class LSDRadixSort{
         return digital;
     }
 
+    /**
+     * 获取指定位数的数
+     */
     private int digital(int num, int digital){
-        int len = getDigitalLen(num);
-        if(len < digital){
-            return 0;
-        }
-        if(digital==1){
-            return num %10;
-        }
         int tmp = (int)Math.pow(10,digital-1);
         num = num / tmp;
         return num % 10;

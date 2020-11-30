@@ -3,8 +3,7 @@ package com.chen.algorithm.sort;
 /**
  * @author: Chentian
  * @date: Created in 2020/11/27 6:25
- * @desc 给定一个无序的
- * 数组，找出数组在排序之后，相邻元素之间最大的差值。
+ * @desc 给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
  * https://leetcode-cn.com/problems/maximum-gap/
  * 利用桶排序思想
  */
@@ -21,86 +20,47 @@ public class MaximumGap {
             return 0;
         }
 
-        int bucketSize = nums.length + 1;
-        int[] maxBucket = new int[bucketSize];
-        int[] minBucket = new int[bucketSize];
-        int[] emptyBucket = new int[bucketSize];
-
-        int minNum = getMinNum(nums);
-        int maxNum = getMaxNum(nums);
+        //获取最大值和最小值
+        int minNum = Integer.MAX_VALUE;
+        int maxNum = Integer.MIN_VALUE;
+        for (int i = 0 ; i < nums.length ; i++){
+            minNum = nums[i] < minNum ? nums[i] : minNum;
+            maxNum = nums[i] > maxNum ? nums[i] : maxNum;
+        }
         if(maxNum == minNum){
             return 0;
         }
 
+        int bucketSize = nums.length + 1;
+        int[] maxBucket = new int[bucketSize];
+        int[] minBucket = new int[bucketSize];
+        boolean[] emptyBucket = new boolean[bucketSize];
+
         //将无序数组放入桶中
         for (int i = 0 ; i < nums.length ; i++){
-            int index = getBucketIndex(minNum,maxNum,bucketSize,nums[i]);
-            if(emptyBucket[index] == 0){
-                emptyBucket[index] = 1;
-                minBucket[index] = nums[i];
-                maxBucket[index] = nums[i];
-             }else {
-                if(nums[i] < minBucket[index]){
-                    minBucket[index] = nums[i];
-                }
-                if(nums[i] > maxBucket[index]){
-                    maxBucket[index] = nums[i];
-                }
-            }
+            int index = getBucketIndex(minNum,maxNum,nums.length,nums[i]);
+
+            minBucket[index] = emptyBucket[index] ? Math.min(nums[i], minBucket[index]) : nums[i];
+            maxBucket[index] = emptyBucket[index] ? Math.max(nums[i], maxBucket[index]) : nums[i];
+            emptyBucket[index] = true;
         }
 
         //获取相邻两数最大间距
-        int maxGap = Integer.MIN_VALUE;
-        for (int i = 0 ; i < bucketSize-1; i ++){
-            if(emptyBucket[i] == 0){
+        int maxGap = 0;
+        int lastMax = maxBucket[0] ;
+        for (int i = 1 ; i < bucketSize; i ++){
+            if(!emptyBucket[i]){
                 continue;
             }
-            int next = i+1;
-            for (; next < bucketSize; next++){
-                if(emptyBucket[next] == 1){
-                    break;
-                }
-            }
 
-            int gap = minBucket[next] - maxBucket[i];
-            if(gap > maxGap){
-                maxGap = gap;
-            }
+            maxGap = Math.max(maxGap,minBucket[i] - lastMax);
+            lastMax = maxBucket[i];
         }
         return maxGap;
     }
 
-    private int getBucketIndex(int minNum, int maxNum, int bucketSize, int num) {
-
-        double valueSize = (maxNum - minNum ) / (bucketSize * 1.0);
-
-        for (int i = 0 ; i < bucketSize ; i++){
-            double left = minNum + (i * valueSize );
-            double right = minNum + (i+1) * valueSize;
-            if(num >= left && num <= right){
-                return i;
-            }
-        }
-        return bucketSize-1;
-    }
-
-    private int getMaxNum(int[] nums) {
-        int max = Integer.MIN_VALUE;
-        for (int i = 0 ; i < nums.length ; i++){
-            if(nums[i] > max){
-                max = nums[i];
-            }
-        }
-        return max;
-    }
-
-    private int getMinNum(int[] nums) {
-        int min = Integer.MAX_VALUE;
-        for (int i = 0 ; i < nums.length ; i++){
-            if(nums[i] < min){
-                min = nums[i];
-            }
-        }
-        return min;
+    private int getBucketIndex(long minNum, long maxNum, long length, long num) {
+        //获取元素在存放桶的索引，使用long防止溢出
+        return (int)((num - minNum) * length / (maxNum - minNum)) ;
     }
 }
