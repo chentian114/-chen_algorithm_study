@@ -6,7 +6,7 @@ import java.util.Scanner;
  * @author: Chentian
  * @date: Created in 2020/11/17 6:33
  * @desc 小和问题
- * 牛客网-在线编程-程序员代码面试指南-计算数组的小和
+ * 牛客网-在线编程-程序员代码面试指南-CD21-计算数组的小和
  * https://www.nowcoder.com/ta/programmer-code-interview-guide
  * 题目描述：
  * 数组小和的定义如下：

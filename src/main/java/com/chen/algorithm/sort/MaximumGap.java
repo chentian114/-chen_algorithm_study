@@ -3,7 +3,8 @@ package com.chen.algorithm.sort;
 /**
  * @author: Chentian
  * @date: Created in 2020/11/27 6:25
- * @desc 给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
+ * @desc leetcode 164. 最大间距
+ * 给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
  * https://leetcode-cn.com/problems/maximum-gap/
  * 利用桶排序思想
  */
